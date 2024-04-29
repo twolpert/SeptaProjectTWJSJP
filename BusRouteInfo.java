@@ -1,3 +1,4 @@
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -76,14 +77,24 @@ public class BusRouteInfo extends Application {
         for (JsonElement busElement : busesArray) {
             JsonObject busObject = busElement.getAsJsonObject();
             String routeId = busObject.get("route_id").getAsString();
-            // Ensure the key matches the case used in the JSON data 
             String direction = busObject.get("Direction").getAsString();
             String destination = busObject.get("destination").getAsString();
+            String seatAvailability = busObject.get("estimated_seat_availability").getAsString();
+            
+            String nextStopName;
+            try {
+                nextStopName = busObject.get("next_stop_name").getAsString();
+            } catch (Exception e) {
+                nextStopName = "Unknown";
+            }
+
+            // Append next stop name to route info
             routeInfo.append("Route ID: ").append(routeId)
-                     .append(", Direction: ").append(direction)
-                     .append(", Destination: ").append(destination)
-                  
-                     .append("\n");
+                    .append(", Direction: ").append(direction)
+                    .append(", Destination: ").append(destination)
+                    .append(", Seat Availability: ").append(seatAvailability)
+                    .append(", Next Stop: ").append(nextStopName)
+                    .append("\n");
         }
 
         return routeInfo.toString();
